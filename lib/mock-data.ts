@@ -1,4 +1,4 @@
-import { Profile, Company, Log, Comment, TeamMember, Badge, UserBadge } from "@/types";
+import { Profile, Company, Log, Comment, TeamMember, Badge, UserBadge, FuelContribution } from "@/types";
 
 export const mockProfiles: Profile[] = [
   {
@@ -79,6 +79,8 @@ export const mockCompanies: Company[] = [
     is_open_to_investors: true,
     execution_score: 87,
     streak_days: 23,
+    fuel_total: 2847,
+    fuel_count: 42,
     created_at: "2024-01-20T00:00:00Z",
     updated_at: "2024-06-01T00:00:00Z",
     owner: undefined,
@@ -100,6 +102,8 @@ export const mockCompanies: Company[] = [
     is_open_to_investors: true,
     execution_score: 92,
     streak_days: 45,
+    fuel_total: 5120,
+    fuel_count: 78,
     created_at: "2024-02-10T00:00:00Z",
     updated_at: "2024-06-01T00:00:00Z",
     owner: undefined,
@@ -121,6 +125,8 @@ export const mockCompanies: Company[] = [
     is_open_to_investors: false,
     execution_score: 34,
     streak_days: 7,
+    fuel_total: 275,
+    fuel_count: 8,
     created_at: "2024-04-15T00:00:00Z",
     updated_at: "2024-06-01T00:00:00Z",
     owner: undefined,
@@ -142,6 +148,8 @@ export const mockCompanies: Company[] = [
     is_open_to_investors: false,
     execution_score: 95,
     streak_days: 120,
+    fuel_total: 12450,
+    fuel_count: 156,
     created_at: "2023-09-01T00:00:00Z",
     updated_at: "2024-06-01T00:00:00Z",
     owner: undefined,
@@ -163,6 +171,8 @@ export const mockCompanies: Company[] = [
     is_open_to_investors: true,
     execution_score: 71,
     streak_days: 14,
+    fuel_total: 890,
+    fuel_count: 19,
     created_at: "2024-03-01T00:00:00Z",
     updated_at: "2024-06-01T00:00:00Z",
     owner: undefined,
@@ -184,6 +194,8 @@ export const mockCompanies: Company[] = [
     is_open_to_investors: true,
     execution_score: 78,
     streak_days: 31,
+    fuel_total: 3200,
+    fuel_count: 51,
     created_at: "2024-01-05T00:00:00Z",
     updated_at: "2024-06-01T00:00:00Z",
     owner: undefined,
@@ -197,6 +209,7 @@ export const mockLogs: Log[] = [
     id: "log-1",
     company_id: "comp-1",
     author_id: "user-1",
+    log_number: 47,
     type: "shipped",
     title: "Launched v2.0 of the CI/CD integration",
     content: "After 3 weeks of intense work, we've shipped our completely revamped CI/CD integration. Key improvements:\n\n- 60% faster pipeline detection\n- Support for GitHub Actions, GitLab CI, and CircleCI\n- Auto-fix suggestions for failing builds\n\nEarly feedback from beta users has been incredibly positive. Seeing a 40% increase in daily active usage since the soft launch on Monday.",
@@ -205,7 +218,7 @@ export const mockLogs: Log[] = [
     feedback_options: null,
     created_at: "2024-05-28T14:00:00Z",
     updated_at: "2024-05-28T14:00:00Z",
-    author: mockProfiles[0],
+    author: undefined,
     company: undefined,
     comment_count: 12,
   },
@@ -213,6 +226,7 @@ export const mockLogs: Log[] = [
     id: "log-2",
     company_id: "comp-2",
     author_id: "user-2",
+    log_number: 63,
     type: "experiment",
     title: "Testing dynamic pricing for energy optimization",
     content: "We're running an A/B test with 20 buildings to see if dynamic pricing recommendations (based on real-time grid demand) lead to better energy savings compared to our current static scheduling approach.\n\nHypothesis: Buildings using dynamic pricing will see 15% more savings.\n\nDuration: 30 days\nControl: 10 buildings with current system\nTest: 10 buildings with dynamic pricing",
@@ -221,7 +235,7 @@ export const mockLogs: Log[] = [
     feedback_options: null,
     created_at: "2024-05-27T10:00:00Z",
     updated_at: "2024-05-27T10:00:00Z",
-    author: mockProfiles[1],
+    author: undefined,
     company: undefined,
     comment_count: 8,
   },
@@ -229,6 +243,7 @@ export const mockLogs: Log[] = [
     id: "log-3",
     company_id: "comp-1",
     author_id: "user-1",
+    log_number: 46,
     type: "decision",
     title: "Switching from REST to GraphQL for our public API",
     content: "After much deliberation, we're moving our public API from REST to GraphQL. Reasons:\n\n1. Customers need flexible queries for different workflow configurations\n2. Reduces over-fetching (our REST endpoints return too much data)\n3. Better developer experience with auto-generated types\n\nTrade-offs: Migration effort (~2 months), learning curve for some customers. We'll maintain REST for 6 months during transition.",
@@ -237,7 +252,7 @@ export const mockLogs: Log[] = [
     feedback_options: null,
     created_at: "2024-05-25T16:00:00Z",
     updated_at: "2024-05-25T16:00:00Z",
-    author: mockProfiles[0],
+    author: undefined,
     company: undefined,
     comment_count: 15,
   },
@@ -245,6 +260,7 @@ export const mockLogs: Log[] = [
     id: "log-4",
     company_id: "comp-3",
     author_id: "user-5",
+    log_number: 12,
     type: "pivot",
     title: "Pivoting from B2C to B2B2C model",
     content: "After 3 months of trying direct-to-consumer, we've learned that parents aren't our primary buyer - schools are. We're pivoting to sell to schools who then provide LearnPath to students.\n\nWhat changed: CAC was $180 for individual parents vs $12/student when selling to schools. Schools also provide better feedback loops for our AI training.",
@@ -253,7 +269,7 @@ export const mockLogs: Log[] = [
     feedback_options: null,
     created_at: "2024-05-24T09:00:00Z",
     updated_at: "2024-05-24T09:00:00Z",
-    author: mockProfiles[4],
+    author: undefined,
     company: undefined,
     comment_count: 22,
   },
@@ -261,6 +277,7 @@ export const mockLogs: Log[] = [
     id: "log-5",
     company_id: "comp-2",
     author_id: "user-2",
+    log_number: 62,
     type: "failure",
     title: "Hardware partnership fell through",
     content: "Our partnership with SensorTech for custom IoT sensors has collapsed. They're pivoting to automotive and can't support our volume.\n\nLessons learned:\n- Don't rely on a single hardware supplier\n- We should have started building relationships with backup suppliers earlier\n- Need to evaluate off-the-shelf alternatives more seriously\n\nNext step: Evaluating 3 alternative sensor providers this week.",
@@ -269,7 +286,7 @@ export const mockLogs: Log[] = [
     feedback_options: null,
     created_at: "2024-05-23T11:00:00Z",
     updated_at: "2024-05-23T11:00:00Z",
-    author: mockProfiles[1],
+    author: undefined,
     company: undefined,
     comment_count: 18,
   },
@@ -277,6 +294,7 @@ export const mockLogs: Log[] = [
     id: "log-6",
     company_id: "comp-4",
     author_id: "user-1",
+    log_number: 156,
     type: "shipped",
     title: "Crossed $1M ARR milestone",
     content: "Huge milestone for PayBridge - we've crossed $1M in annual recurring revenue! This is 10 months ahead of our original projection.\n\nKey drivers:\n- Enterprise deals in Nigeria and Kenya\n- Self-serve product for SMBs\n- 95% net revenue retention\n\nNext goal: $3M ARR by end of year.",
@@ -285,7 +303,7 @@ export const mockLogs: Log[] = [
     feedback_options: null,
     created_at: "2024-05-22T15:00:00Z",
     updated_at: "2024-05-22T15:00:00Z",
-    author: mockProfiles[0],
+    author: undefined,
     company: undefined,
     comment_count: 34,
   },
@@ -293,6 +311,7 @@ export const mockLogs: Log[] = [
     id: "log-7",
     company_id: "comp-5",
     author_id: "user-2",
+    log_number: 28,
     type: "experiment",
     title: "Testing FHIR integration for hospital data",
     content: "Starting a pilot with Boston General to test our FHIR (Fast Healthcare Interoperability Resources) integration. If this works, it opens up EHR data from any hospital using Epic or Cerner.\n\nSuccess criteria: Successfully import patient records for 100 consenting patients within 2 weeks.",
@@ -301,7 +320,7 @@ export const mockLogs: Log[] = [
     feedback_options: null,
     created_at: "2024-05-21T13:00:00Z",
     updated_at: "2024-05-21T13:00:00Z",
-    author: mockProfiles[1],
+    author: undefined,
     company: undefined,
     comment_count: 6,
   },
@@ -309,6 +328,7 @@ export const mockLogs: Log[] = [
     id: "log-8",
     company_id: "comp-6",
     author_id: "user-4",
+    log_number: 42,
     type: "shipped",
     title: "Mobile app v1.0 is live on App Store",
     content: "After 4 months of development, NomadDesk is officially on the App Store! Features in v1.0:\n\n- Browse and book desks/rooms in 50+ cities\n- Real-time availability\n- Team booking for groups\n- Reviews and ratings\n\nAndroid coming in 3 weeks.",
@@ -317,153 +337,77 @@ export const mockLogs: Log[] = [
     feedback_options: null,
     created_at: "2024-05-20T10:00:00Z",
     updated_at: "2024-05-20T10:00:00Z",
-    author: mockProfiles[3],
+    author: undefined,
     company: undefined,
     comment_count: 9,
   },
 ];
 
+// Wire up author references after declaration
+mockLogs[0].author = mockProfiles[0];
+mockLogs[1].author = mockProfiles[1];
+mockLogs[2].author = mockProfiles[0];
+mockLogs[3].author = mockProfiles[4];
+mockLogs[4].author = mockProfiles[1];
+mockLogs[5].author = mockProfiles[0];
+mockLogs[6].author = mockProfiles[1];
+mockLogs[7].author = mockProfiles[3];
+
 export const mockTeamMembers: TeamMember[] = [
-  {
-    id: "tm-1",
-    company_id: "comp-1",
-    user_id: "user-1",
-    name: "Sarah Chen",
-    role: "CEO & Co-founder",
-    is_founder: true,
-    created_at: "2024-01-20T00:00:00Z",
-  },
-  {
-    id: "tm-2",
-    company_id: "comp-1",
-    user_id: null,
-    name: "David Park",
-    role: "CTO & Co-founder",
-    is_founder: true,
-    created_at: "2024-01-20T00:00:00Z",
-  },
-  {
-    id: "tm-3",
-    company_id: "comp-2",
-    user_id: "user-2",
-    name: "Marcus Johnson",
-    role: "Founder & CEO",
-    is_founder: true,
-    created_at: "2024-02-10T00:00:00Z",
-  },
-  {
-    id: "tm-4",
-    company_id: "comp-3",
-    user_id: "user-5",
-    name: "Priya Patel",
-    role: "Founder",
-    is_founder: true,
-    created_at: "2024-04-15T00:00:00Z",
-  },
+  { id: "tm-1", company_id: "comp-1", user_id: "user-1", name: "Sarah Chen", role: "CEO & Co-founder", is_founder: true, created_at: "2024-01-20T00:00:00Z" },
+  { id: "tm-2", company_id: "comp-1", user_id: null, name: "David Park", role: "CTO & Co-founder", is_founder: true, created_at: "2024-01-20T00:00:00Z" },
+  { id: "tm-3", company_id: "comp-2", user_id: "user-2", name: "Marcus Johnson", role: "Founder & CEO", is_founder: true, created_at: "2024-02-10T00:00:00Z" },
+  { id: "tm-4", company_id: "comp-3", user_id: "user-5", name: "Priya Patel", role: "Founder", is_founder: true, created_at: "2024-04-15T00:00:00Z" },
 ];
 
 export const mockBadges: Badge[] = [
-  {
-    id: "badge-1",
-    name: "First Ship",
-    description: "Shipped your first feature or product",
-    icon: "rocket",
-    criteria: { log_type: "shipped", count: 1 },
-  },
-  {
-    id: "badge-2",
-    name: "7-Day Streak",
-    description: "Logged activity for 7 consecutive days",
-    icon: "flame",
-    criteria: { streak: 7 },
-  },
-  {
-    id: "badge-3",
-    name: "Transparent Builder",
-    description: "Shared a failure or lesson learned publicly",
-    icon: "eye",
-    criteria: { log_type: "failure", count: 1 },
-  },
-  {
-    id: "badge-4",
-    name: "Pivot Master",
-    description: "Successfully documented a pivot",
-    icon: "refresh",
-    criteria: { log_type: "pivot", count: 1 },
-  },
-  {
-    id: "badge-5",
-    name: "30-Day Streak",
-    description: "Logged activity for 30 consecutive days",
-    icon: "flame",
-    criteria: { streak: 30 },
-  },
+  { id: "badge-1", name: "First Ship", description: "Shipped your first feature or product", icon: "rocket", criteria: { log_type: "shipped", count: 1 } },
+  { id: "badge-2", name: "7-Day Streak", description: "Logged activity for 7 consecutive days", icon: "flame", criteria: { streak: 7 } },
+  { id: "badge-3", name: "Transparent Builder", description: "Shared a failure or lesson learned publicly", icon: "eye", criteria: { log_type: "failure", count: 1 } },
+  { id: "badge-4", name: "Pivot Master", description: "Successfully documented a pivot", icon: "refresh", criteria: { log_type: "pivot", count: 1 } },
+  { id: "badge-5", name: "30-Day Streak", description: "Logged activity for 30 consecutive days", icon: "flame", criteria: { streak: 30 } },
 ];
 
 export const mockUserBadges: UserBadge[] = [
-  {
-    id: "ub-1",
-    user_id: "user-1",
-    badge_id: "badge-1",
-    company_id: "comp-1",
-    earned_at: "2024-02-15T00:00:00Z",
-    badge: mockBadges[0],
-  },
-  {
-    id: "ub-2",
-    user_id: "user-1",
-    badge_id: "badge-2",
-    company_id: "comp-1",
-    earned_at: "2024-03-01T00:00:00Z",
-    badge: mockBadges[1],
-  },
-  {
-    id: "ub-3",
-    user_id: "user-2",
-    badge_id: "badge-1",
-    company_id: "comp-2",
-    earned_at: "2024-03-15T00:00:00Z",
-    badge: mockBadges[0],
-  },
-  {
-    id: "ub-4",
-    user_id: "user-2",
-    badge_id: "badge-5",
-    company_id: "comp-2",
-    earned_at: "2024-05-01T00:00:00Z",
-    badge: mockBadges[4],
-  },
+  { id: "ub-1", user_id: "user-1", badge_id: "badge-1", company_id: "comp-1", earned_at: "2024-02-15T00:00:00Z", badge: mockBadges[0] },
+  { id: "ub-2", user_id: "user-1", badge_id: "badge-2", company_id: "comp-1", earned_at: "2024-03-01T00:00:00Z", badge: mockBadges[1] },
+  { id: "ub-3", user_id: "user-2", badge_id: "badge-1", company_id: "comp-2", earned_at: "2024-03-15T00:00:00Z", badge: mockBadges[0] },
+  { id: "ub-4", user_id: "user-2", badge_id: "badge-5", company_id: "comp-2", earned_at: "2024-05-01T00:00:00Z", badge: mockBadges[4] },
 ];
 
-// Current user mock (simulates logged-in user)
+export const mockFuelContributions: FuelContribution[] = [
+  { id: "fuel-1", user_id: "user-2", company_id: "comp-1", amount: 100, message: "Bet on this team", is_public: true, created_at: "2024-05-27T10:00:00Z", user: mockProfiles[1] },
+  { id: "fuel-2", user_id: "user-3", company_id: "comp-1", amount: 25, message: "Love the vision", is_public: true, created_at: "2024-05-25T14:00:00Z", user: mockProfiles[2] },
+  { id: "fuel-3", user_id: "user-4", company_id: "comp-1", amount: 5, message: null, is_public: false, created_at: "2024-05-24T09:00:00Z", user: mockProfiles[3] },
+  { id: "fuel-4", user_id: "user-3", company_id: "comp-2", amount: 100, message: "Climate tech is the future", is_public: true, created_at: "2024-05-26T11:00:00Z", user: mockProfiles[2] },
+];
+
 export const mockCurrentUser: Profile = mockProfiles[0];
 
-// Helper to get company logs
 export function getCompanyLogs(companyId: string): Log[] {
   return mockLogs.filter((log) => log.company_id === companyId);
 }
 
-// Helper to get company by slug
 export function getCompanyBySlug(slug: string): Company | undefined {
   return mockCompanies.find((c) => c.slug === slug);
 }
 
-// Helper to get user companies
 export function getUserCompanies(userId: string): Company[] {
   return mockCompanies.filter((c) => c.owner_id === userId);
 }
 
-// Helper to get profile by username
 export function getProfileByUsername(username: string): Profile | undefined {
   return mockProfiles.find((p) => p.username === username);
 }
 
-// Helper to get team members
 export function getTeamMembers(companyId: string): TeamMember[] {
   return mockTeamMembers.filter((tm) => tm.company_id === companyId);
 }
 
-// Helper to get user badges
 export function getUserBadges(userId: string): UserBadge[] {
   return mockUserBadges.filter((ub) => ub.user_id === userId);
+}
+
+export function getCompanyFuel(companyId: string): FuelContribution[] {
+  return mockFuelContributions.filter((f) => f.company_id === companyId);
 }

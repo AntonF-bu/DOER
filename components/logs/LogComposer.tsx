@@ -3,22 +3,23 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogTypeSelector } from "./LogTypeSelector";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { LOG_TYPES, LogType } from "@/lib/constants";
 import { mockCompanies, mockCurrentUser } from "@/lib/mock-data";
-import { Send, Loader2 } from "lucide-react";
 
-export function LogComposer() {
+interface LogComposerProps {
+  companyId?: string;
+  defaultType?: LogType;
+}
+
+export function LogComposer({
+  companyId,
+  defaultType = "shipped",
+}: LogComposerProps) {
   const router = useRouter();
-  const [type, setType] = useState<LogType>("shipped");
+  const [type, setType] = useState<LogType>(defaultType);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [companyId, setCompanyId] = useState("");
+  const [selectedCompanyId, setSelectedCompanyId] = useState(companyId ?? "");
   const [submitting, setSubmitting] = useState(false);
 
   const userCompanies = mockCompanies.filter(
@@ -27,86 +28,93 @@ export function LogComposer() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !companyId) return;
+    if (!title.trim()) return;
 
     setSubmitting(true);
     // TODO: API call to create log
     await new Promise((r) => setTimeout(r, 1000));
-    const company = mockCompanies.find((c) => c.id === companyId);
+    const company = mockCompanies.find((c) => c.id === selectedCompanyId);
     if (company) {
       router.push(`/company/${company.slug}`);
     }
   };
 
+  const handleCancel = () => {
+    router.back();
+  };
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create a Log</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label>What type of update is this?</Label>
-            <LogTypeSelector value={type} onChange={setType} />
-          </div>
+    <div className="bg-card border border-border rounded-xl p-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Log type selector */}
+        <div>
+          <LogTypeSelector selected={type} onSelect={setType} />
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="company">Company</Label>
-            <Select value={companyId} onValueChange={setCompanyId}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a company" />
-              </SelectTrigger>
-              <SelectContent>
-                {userCompanies.map((company) => (
-                  <SelectItem key={company.id} value={company.id}>
-                    {company.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+        {/* Company selector if no companyId prop */}
+        {!companyId && userCompanies.length > 1 && (
+          <div>
+            <select
+              value={selectedCompanyId}
+              onChange={(e) => setSelectedCompanyId(e.target.value)}
+              className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground text-sm focus:outline-none focus:border-primary/50 transition-colors"
+            >
+              <option value="" className="bg-card text-muted-foreground">
+                Select a company
+              </option>
+              {userCompanies.map((company) => (
+                <option
+                  key={company.id}
+                  value={company.id}
+                  className="bg-card text-foreground"
+                >
+                  {company.name}
+                </option>
+              ))}
+            </select>
           </div>
+        )}
 
-          <div className="space-y-2">
-            <Label htmlFor="title">{LOG_TYPES[type].prompt}</Label>
-            <Input
-              id="title"
-              placeholder="Give your log a title..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
+        {/* Title input */}
+        <div>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Give your log a title..."
+            className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 transition-colors"
+            required
+          />
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="content">Details (optional)</Label>
-            <Textarea
-              id="content"
-              placeholder="Share more context, learnings, or details..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={6}
-            />
-          </div>
+        {/* Content textarea */}
+        <div>
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder={LOG_TYPES[type].prompt}
+            className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 transition-colors min-h-[120px] resize-y"
+          />
+        </div>
 
-          <Button
-            type="submit"
-            disabled={submitting || !title.trim() || !companyId}
-            className="w-full sm:w-auto gap-2"
+        {/* Bottom actions */}
+        <div className="flex items-center justify-end gap-3">
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors px-4 py-2"
           >
-            {submitting ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Publishing...
-              </>
-            ) : (
-              <>
-                <Send className="h-4 w-4" />
-                Publish Log
-              </>
-            )}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={submitting || !title.trim()}
+            className="bg-primary text-primary-foreground rounded-lg px-6 py-2 font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {submitting ? "Logging..." : "Log it"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

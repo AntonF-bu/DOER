@@ -26,6 +26,8 @@ export interface Company {
   is_open_to_investors: boolean;
   execution_score: number;
   streak_days: number;
+  fuel_total: number;
+  fuel_count: number;
   created_at: string;
   updated_at: string;
   // Joined fields
@@ -50,6 +52,7 @@ export interface Log {
   id: string;
   company_id: string;
   author_id: string;
+  log_number: number;
   type: "shipped" | "experiment" | "decision" | "pivot" | "failure";
   title: string;
   content: string | null;
@@ -118,4 +121,15 @@ export interface ProfileView {
   company_id: string;
   viewed_at: string;
   viewer?: Profile;
+}
+
+export interface FuelContribution {
+  id: string;
+  user_id: string;
+  company_id: string;
+  amount: number;
+  message: string | null;
+  is_public: boolean;
+  created_at: string;
+  user?: Profile;
 }

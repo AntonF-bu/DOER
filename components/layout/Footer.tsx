@@ -1,46 +1,53 @@
 import Link from "next/link";
-import { Zap } from "lucide-react";
+
+const footerLinks = [
+  { href: "/about", label: "About" },
+  { href: "/blog", label: "Blog" },
+  { href: "https://twitter.com", label: "Twitter", external: true },
+  { href: "https://github.com", label: "GitHub", external: true },
+];
 
 export function Footer() {
   return (
-    <footer className="border-t bg-background">
-      <div className="container py-8 md:py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg mb-3">
-              <Zap className="h-5 w-5 text-primary" />
-              DOER
-            </Link>
-            <p className="text-sm text-muted-foreground">
-              The live execution platform for startups. Ship in public.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-semibold text-sm mb-3">Platform</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/discover" className="hover:text-foreground transition-colors">Discover</Link></li>
-              <li><Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link></li>
-              <li><Link href="/log" className="hover:text-foreground transition-colors">Post a Log</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold text-sm mb-3">Company</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><span className="cursor-default">About</span></li>
-              <li><span className="cursor-default">Blog</span></li>
-              <li><span className="cursor-default">Careers</span></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold text-sm mb-3">Legal</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><span className="cursor-default">Privacy</span></li>
-              <li><span className="cursor-default">Terms</span></li>
-            </ul>
-          </div>
+    <footer className="border-t border-border/50 py-8">
+      <div className="container px-6">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Tagline */}
+          <p className="text-sm text-muted-foreground">
+            Built for founders who ship.
+          </p>
+
+          {/* Links */}
+          <nav className="flex items-center gap-6">
+            {footerLinks.map((link) =>
+              link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
+          </nav>
         </div>
-        <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} DOER. All rights reserved.
+
+        {/* Copyright */}
+        <div className="mt-6 text-center sm:text-left">
+          <p className="text-xs text-muted-foreground/50">
+            &copy; 2024 DOER
+          </p>
         </div>
       </div>
     </footer>

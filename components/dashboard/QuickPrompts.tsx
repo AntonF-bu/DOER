@@ -1,63 +1,47 @@
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Rocket, FlaskConical, Scale, RefreshCw, XCircle, Lightbulb } from "lucide-react";
+"use client";
 
-const prompts = [
-  {
-    icon: Rocket,
-    label: "What did you ship today?",
-    color: "text-emerald-600 bg-emerald-50 hover:bg-emerald-100",
-    type: "shipped",
-  },
-  {
-    icon: FlaskConical,
-    label: "Running any experiments?",
-    color: "text-blue-600 bg-blue-50 hover:bg-blue-100",
-    type: "experiment",
-  },
-  {
-    icon: Scale,
-    label: "Weighing a decision?",
-    color: "text-amber-600 bg-amber-50 hover:bg-amber-100",
-    type: "decision",
-  },
-  {
-    icon: RefreshCw,
-    label: "Making a pivot?",
-    color: "text-purple-600 bg-purple-50 hover:bg-purple-100",
-    type: "pivot",
-  },
-  {
-    icon: XCircle,
-    label: "Share a lesson learned",
-    color: "text-gray-600 bg-gray-50 hover:bg-gray-100",
-    type: "failure",
-  },
-];
+import Link from "next/link";
+import { LOG_TYPES, LogType } from "@/lib/constants";
+import { Rocket, FlaskConical, Scale, RefreshCw, XCircle } from "lucide-react";
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Rocket,
+  FlaskConical,
+  Scale,
+  RefreshCw,
+  XCircle,
+};
+
+const logTypeKeys: LogType[] = ["shipped", "experiment", "decision", "pivot", "failure"];
 
 export function QuickPrompts() {
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2">
-          <Lightbulb className="h-4 w-4" />
+    <div className="bg-card/50 border border-border/50 rounded-xl p-6">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
           Quick Log
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
-          {prompts.map((prompt) => (
+        </span>
+      </div>
+
+      {/* Log type buttons */}
+      <div className="flex flex-wrap gap-2">
+        {logTypeKeys.map((type) => {
+          const config = LOG_TYPES[type];
+          const Icon = iconMap[config.icon];
+
+          return (
             <Link
-              key={prompt.type}
-              href={`/log?type=${prompt.type}`}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${prompt.color}`}
+              key={type}
+              href={`/log?type=${type}`}
+              className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg border transition-all duration-150 hover:scale-[1.02] hover:brightness-125 ${config.bgColor} ${config.color} ${config.borderColor}`}
             >
-              <prompt.icon className="h-4 w-4 shrink-0" />
-              {prompt.label}
+              {Icon && <Icon className="h-3.5 w-3.5" />}
+              {config.label}
             </Link>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+          );
+        })}
+      </div>
+    </div>
   );
 }
