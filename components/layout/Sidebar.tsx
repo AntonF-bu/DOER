@@ -7,6 +7,7 @@ import {
   Building2,
   PenLine,
   Compass,
+  Radio,
   Settings,
   Zap,
 } from "lucide-react";
@@ -18,6 +19,7 @@ const sidebarLinks = [
   { href: "/company/edit", label: "My Company", icon: Building2 },
   { href: "/log", label: "New Log", icon: PenLine },
   { href: "/discover", label: "Discover", icon: Compass },
+  { href: "/signal", label: "Signal", icon: Radio },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

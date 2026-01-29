@@ -8,6 +8,7 @@ import {
   Building2,
   PenLine,
   Compass,
+  Radio,
   Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,6 +24,7 @@ const mobileNavLinks = [
   { href: "/company/edit", label: "My Company", icon: Building2 },
   { href: "/log", label: "New Log", icon: PenLine },
   { href: "/discover", label: "Discover", icon: Compass },
+  { href: "/signal", label: "Signal", icon: Radio },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
