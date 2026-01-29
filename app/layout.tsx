@@ -2,15 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "DOER - Where Builders Ship in Public",
-  description:
-    "The live execution platform for startups. Visibility is earned through logged action, not content performance.",
-  openGraph: {
-    title: "DOER - Where Builders Ship in Public",
-    description:
-      "The live execution platform for startups. Visibility is earned through logged action, not content performance.",
-    type: "website",
-  },
+  title: "DOER — Visibility is earned",
+  description: "The live execution layer for startups. Log what you ship. Build in public.",
 };
 
 export default function RootLayout({
@@ -19,8 +12,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="font-sans antialiased">{children}</body>
+    <html lang="en" className="dark">
+      <body className="font-sans antialiased bg-background text-foreground min-h-screen">
+        {children}
+      </body>
     </html>
   );
 }

@@ -16,7 +16,7 @@ export function BadgeDisplay({ badges }: BadgeDisplayProps) {
   if (badges.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
       {badges.map((ub) => {
         const IconComponent = ub.badge?.icon
           ? badgeIcons[ub.badge.icon] || Award
@@ -24,13 +24,17 @@ export function BadgeDisplay({ badges }: BadgeDisplayProps) {
         return (
           <div
             key={ub.id}
-            className="flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1.5"
-            title={ub.badge?.description || ""}
+            className="bg-secondary/30 rounded-lg p-3"
           >
-            <IconComponent className="h-3.5 w-3.5 text-amber-600" />
-            <span className="text-xs font-medium text-amber-700">
+            <IconComponent className="h-5 w-5 text-amber-400 mb-2" />
+            <p className="text-sm text-foreground font-medium">
               {ub.badge?.name}
-            </span>
+            </p>
+            {ub.badge?.description && (
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {ub.badge.description}
+              </p>
+            )}
           </div>
         );
       })}
