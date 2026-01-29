@@ -1,19 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { mockCurrentUser, getUserCompanies } from "@/lib/mock-data";
-import { Save, Loader2, Link as LinkIcon, Github, CreditCard } from "lucide-react";
+import { mockCurrentUser } from "@/lib/mock-data";
+import { INDUSTRIES, COMPANY_STAGES } from "@/lib/constants";
 
 export default function SettingsPage() {
   const user = mockCurrentUser;
-  const companies = getUserCompanies(user.id);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
@@ -23,131 +15,134 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-muted-foreground">Manage your account and preferences</p>
+    <div className="p-6 max-w-2xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+        <p className="text-muted-foreground">Manage your account.</p>
       </div>
 
-      {/* Profile Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Profile</CardTitle>
-          <CardDescription>Update your personal information</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Full name</Label>
-            <Input id="fullName" defaultValue={user.full_name || ""} />
+      {/* Profile Section */}
+      <div className="bg-card/50 border border-border/50 rounded-xl p-6 mb-6">
+        <h2 className="text-lg font-medium text-foreground mb-4">Profile</h2>
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="fullName" className="block text-sm text-muted-foreground mb-1.5">
+              Full name
+            </label>
+            <input
+              id="fullName"
+              type="text"
+              defaultValue={user.full_name || ""}
+              placeholder="Your full name"
+              className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50"
+            />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
-            <Input id="username" defaultValue={user.username} />
+          <div>
+            <label htmlFor="username" className="block text-sm text-muted-foreground mb-1.5">
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              defaultValue={user.username}
+              placeholder="username"
+              className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50"
+            />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea id="bio" defaultValue={user.bio || ""} rows={3} />
+          <div>
+            <label htmlFor="bio" className="block text-sm text-muted-foreground mb-1.5">
+              Bio
+            </label>
+            <textarea
+              id="bio"
+              defaultValue={user.bio || ""}
+              placeholder="Tell the world about yourself"
+              rows={3}
+              className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 resize-none"
+            />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="role">Role</Label>
-            <Select defaultValue={user.role}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="founder">Founder</SelectItem>
-                <SelectItem value="investor">Investor</SelectItem>
-                <SelectItem value="talent">Talent</SelectItem>
-                <SelectItem value="collaborator">Collaborator</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <Button onClick={handleSave} disabled={saving} className="gap-2">
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            Save Changes
-          </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      {/* Company Settings */}
-      {companies.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Company</CardTitle>
-            <CardDescription>Edit your company details</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {companies.map((company) => (
-              <div key={company.id} className="flex items-center justify-between p-3 rounded-lg border">
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
-                    {company.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">{company.name}</p>
-                    <p className="text-xs text-muted-foreground">{company.stage}</p>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm" asChild>
-                  <a href="/company/edit">Edit</a>
-                </Button>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      {/* Company Section */}
+      <div className="bg-card/50 border border-border/50 rounded-xl p-6 mb-6">
+        <h2 className="text-lg font-medium text-foreground mb-4">Company</h2>
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="companyName" className="block text-sm text-muted-foreground mb-1.5">
+              Company name
+            </label>
+            <input
+              id="companyName"
+              type="text"
+              placeholder="Your company name"
+              className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50"
+            />
+          </div>
+          <div>
+            <label htmlFor="oneLiner" className="block text-sm text-muted-foreground mb-1.5">
+              One-liner
+            </label>
+            <input
+              id="oneLiner"
+              type="text"
+              placeholder="What does your company do?"
+              className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50"
+            />
+          </div>
+          <div>
+            <label htmlFor="industry" className="block text-sm text-muted-foreground mb-1.5">
+              Industry
+            </label>
+            <select
+              id="industry"
+              className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary/50"
+            >
+              <option value="">Select industry</option>
+              {INDUSTRIES.map((ind) => (
+                <option key={ind} value={ind}>
+                  {ind}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="stage" className="block text-sm text-muted-foreground mb-1.5">
+              Stage
+            </label>
+            <select
+              id="stage"
+              className="w-full bg-secondary/50 border border-border/50 rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary/50"
+            >
+              {Object.entries(COMPANY_STAGES).map(([key, val]) => (
+                <option key={key} value={key}>
+                  {val.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
 
-      {/* Integrations */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Integrations</CardTitle>
-          <CardDescription>Connect external services</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {[
-            { icon: Github, name: "GitHub", desc: "Auto-log commits and deployments", connected: false },
-            { icon: CreditCard, name: "Stripe", desc: "Share revenue metrics", connected: false },
-            { icon: LinkIcon, name: "Linear", desc: "Sync project milestones", connected: false },
-          ].map((integration) => (
-            <div key={integration.name} className="flex items-center justify-between p-3 rounded-lg border">
-              <div className="flex items-center gap-3">
-                <integration.icon className="h-5 w-5 text-muted-foreground" />
-                <div>
-                  <p className="text-sm font-medium">{integration.name}</p>
-                  <p className="text-xs text-muted-foreground">{integration.desc}</p>
-                </div>
-              </div>
-              <Button variant="outline" size="sm" disabled>
-                Coming Soon
-              </Button>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      {/* Danger Zone */}
+      <div className="border border-red-500/20 bg-red-500/5 rounded-xl p-6 mb-6">
+        <h2 className="text-lg font-medium text-red-400 mb-2">Danger Zone</h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          Once you delete your account, there is no going back.
+        </p>
+        <button className="bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg px-4 py-2 text-sm hover:bg-red-500/20 transition-colors">
+          Delete Account
+        </button>
+      </div>
 
-      {/* Notifications */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Notifications</CardTitle>
-          <CardDescription>Manage email preferences</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {[
-            "New followers",
-            "Comments on your logs",
-            "Feedback poll results",
-            "Weekly execution digest",
-          ].map((pref) => (
-            <div key={pref} className="flex items-center justify-between">
-              <span className="text-sm">{pref}</span>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" defaultChecked />
-                <div className="w-9 h-5 bg-muted rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-              </label>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      {/* Save Button */}
+      <button
+        onClick={handleSave}
+        disabled={saving}
+        className="bg-primary text-primary-foreground rounded-lg px-8 py-3 font-medium hover:bg-primary/90 transition-all disabled:opacity-50"
+      >
+        {saving ? "Saving..." : "Save Changes"}
+      </button>
     </div>
   );
 }

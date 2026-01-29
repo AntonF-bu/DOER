@@ -1,21 +1,18 @@
-import { Avatar as UIAvatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 interface AvatarProps {
-  src?: string | null;
   name: string;
-  size?: "sm" | "md" | "lg" | "xl";
-  className?: string;
+  src?: string | null;
+  size?: "sm" | "md" | "lg";
 }
 
 const sizeClasses = {
-  sm: "h-8 w-8 text-xs",
-  md: "h-10 w-10 text-sm",
-  lg: "h-12 w-12 text-base",
-  xl: "h-16 w-16 text-lg",
+  sm: "w-8 h-8 text-xs",
+  md: "w-10 h-10 text-sm",
+  lg: "w-12 h-12 text-base",
 };
 
-export function UserAvatar({ src, name, size = "md", className }: AvatarProps) {
+export function UserAvatar({ name, src, size = "md" }: AvatarProps) {
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -23,12 +20,27 @@ export function UserAvatar({ src, name, size = "md", className }: AvatarProps) {
     .toUpperCase()
     .slice(0, 2);
 
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt={name}
+        className={cn(
+          "rounded-full object-cover",
+          sizeClasses[size]
+        )}
+      />
+    );
+  }
+
   return (
-    <UIAvatar className={cn(sizeClasses[size], className)}>
-      {src && <AvatarImage src={src} alt={name} />}
-      <AvatarFallback className="bg-primary/10 text-primary font-medium">
-        {initials}
-      </AvatarFallback>
-    </UIAvatar>
+    <div
+      className={cn(
+        "bg-secondary text-foreground rounded-full flex items-center justify-center font-medium shrink-0",
+        sizeClasses[size]
+      )}
+    >
+      {initials}
+    </div>
   );
 }

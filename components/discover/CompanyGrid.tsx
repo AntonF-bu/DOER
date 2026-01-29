@@ -7,7 +7,7 @@ interface CompanyGridProps {
 
 export function CompanyGrid({ companies }: CompanyGridProps) {
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
       {companies.map((company) => (
         <CompanyCard key={company.id} company={company} />
       ))}

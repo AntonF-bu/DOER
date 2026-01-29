@@ -7,10 +7,10 @@ export const metadata = {
 
 export default function DiscoverPage() {
   return (
-    <div>
+    <div className="max-w-7xl mx-auto p-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-1">Discover</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl font-bold text-foreground mb-1">Discover</h1>
+        <p className="text-muted-foreground text-sm">
           Find companies ranked by execution, not engagement.
         </p>
       </div>

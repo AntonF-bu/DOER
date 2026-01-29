@@ -1,44 +1,50 @@
+"use client";
+
 import Link from "next/link";
 import { Profile, Company, UserBadge } from "@/types";
-import { UserAvatar } from "@/components/shared/Avatar";
-import { StatusBadge } from "@/components/shared/Badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { CalendarDays, FileText, Building2, Award, CheckCircle } from "lucide-react";
+import { USER_ROLES } from "@/lib/constants";
+import { Building2, FileText, CalendarDays, CheckCircle } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface UserProfileProps {
   profile: Profile;
-  companies: Company[];
-  badges: UserBadge[];
-  logCount: number;
+  companies?: Company[];
+  badges?: UserBadge[];
+  logCount?: number;
 }
 
-export function UserProfile({ profile, companies, badges, logCount }: UserProfileProps) {
+export function UserProfile({ profile, companies = [], badges = [], logCount = 0 }: UserProfileProps) {
+  const roleConfig = USER_ROLES[profile.role];
+
+  const initials = profile.full_name
+    ? profile.full_name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : profile.username.slice(0, 2).toUpperCase();
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-start gap-4">
-        <UserAvatar
-          name={profile.full_name || profile.username}
-          src={profile.avatar_url}
-          size="xl"
-        />
+        <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center text-xl font-medium text-foreground shrink-0">
+          {initials}
+        </div>
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold">{profile.full_name}</h1>
+            <h1 className="text-2xl font-bold text-foreground">{profile.full_name}</h1>
             {profile.is_verified && (
               <CheckCircle className="h-5 w-5 text-primary" />
             )}
           </div>
           <p className="text-muted-foreground">@{profile.username}</p>
-          <div className="flex items-center gap-2 mt-2">
-            <StatusBadge variant="role" value={profile.role} />
-            {profile.investor_verified && (
-              <Badge variant="secondary" className="text-xs">Verified Investor</Badge>
-            )}
-          </div>
+          <span
+            className={`inline-block mt-1.5 ${roleConfig.color} ${roleConfig.bgColor} rounded-full px-3 py-0.5 text-xs font-medium`}
+          >
+            {roleConfig.label}
+          </span>
         </div>
       </div>
 
@@ -46,16 +52,16 @@ export function UserProfile({ profile, companies, badges, logCount }: UserProfil
         <p className="text-sm text-muted-foreground">{profile.bio}</p>
       )}
 
-      {/* Stats */}
+      {/* Stats Row */}
       <div className="flex items-center gap-6 text-sm">
         <span className="flex items-center gap-1.5">
           <Building2 className="h-4 w-4 text-muted-foreground" />
-          <span className="font-semibold">{companies.length}</span>
+          <span className="font-mono-nums font-semibold text-foreground">{companies.length}</span>
           <span className="text-muted-foreground">companies</span>
         </span>
         <span className="flex items-center gap-1.5">
           <FileText className="h-4 w-4 text-muted-foreground" />
-          <span className="font-semibold">{logCount}</span>
+          <span className="font-mono-nums font-semibold text-foreground">{logCount}</span>
           <span className="text-muted-foreground">logs</span>
         </span>
         <span className="flex items-center gap-1.5">
@@ -66,61 +72,45 @@ export function UserProfile({ profile, companies, badges, logCount }: UserProfil
 
       {/* Badges */}
       {badges.length > 0 && (
-        <>
-          <Separator />
-          <div>
-            <h2 className="font-semibold mb-3 flex items-center gap-2">
-              <Award className="h-4 w-4" />
-              Badges
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {badges.map((ub) => (
-                <div
-                  key={ub.id}
-                  className="flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1"
-                >
-                  <Award className="h-3.5 w-3.5 text-amber-600" />
-                  <span className="text-xs font-medium text-amber-700">
-                    {ub.badge?.name}
-                  </span>
-                </div>
-              ))}
-            </div>
+        <div>
+          <h2 className="text-sm font-medium text-foreground mb-2">Badges</h2>
+          <div className="flex flex-wrap gap-2">
+            {badges.map((ub) => (
+              <div
+                key={ub.id}
+                className="bg-secondary/30 rounded-lg px-3 py-1.5 text-xs text-foreground"
+              >
+                {ub.badge?.name}
+              </div>
+            ))}
           </div>
-        </>
+        </div>
       )}
 
       {/* Companies */}
       {companies.length > 0 && (
-        <>
-          <Separator />
-          <div>
-            <h2 className="font-semibold mb-3 flex items-center gap-2">
-              <Building2 className="h-4 w-4" />
-              Companies
-            </h2>
-            <div className="grid gap-3">
-              {companies.map((company) => (
-                <Link key={company.id} href={`/company/${company.slug}`}>
-                  <Card className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-4 flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                        {company.name.charAt(0)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm">{company.name}</p>
-                        {company.one_liner && (
-                          <p className="text-xs text-muted-foreground truncate">{company.one_liner}</p>
-                        )}
-                      </div>
-                      <StatusBadge variant="stage" value={company.stage} size="sm" />
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
+        <div>
+          <h2 className="text-sm font-medium text-foreground mb-2">Companies</h2>
+          <div className="grid gap-3">
+            {companies.map((company) => (
+              <Link key={company.id} href={`/company/${company.slug}`}>
+                <div className="bg-card/50 border border-border/50 rounded-xl p-4 hover:bg-card/80 hover:border-border/80 transition-all">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                      {company.name.charAt(0)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm text-foreground">{company.name}</p>
+                      {company.one_liner && (
+                        <p className="text-xs text-muted-foreground truncate">{company.one_liner}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

@@ -1,40 +1,19 @@
 import { Flame } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface StreakCounterProps {
   days: number;
-  size?: "sm" | "md" | "lg";
 }
 
-export function StreakCounter({ days, size = "md" }: StreakCounterProps) {
-  const isMilestone = [7, 30, 100].includes(days);
-
-  const sizeClasses = {
-    sm: "text-sm gap-1",
-    md: "text-base gap-1.5",
-    lg: "text-lg gap-2",
-  };
-
-  const iconSizes = {
-    sm: "h-4 w-4",
-    md: "h-5 w-5",
-    lg: "h-6 w-6",
-  };
-
+export function StreakCounter({ days }: StreakCounterProps) {
   return (
-    <div
-      className={cn(
-        "inline-flex items-center font-bold",
-        sizeClasses[size],
-        days > 0 ? "text-orange-500" : "text-muted-foreground",
-        isMilestone && "animate-pulse"
-      )}
-    >
-      <Flame className={cn(iconSizes[size], days > 0 && "fill-orange-500")} />
-      <span>{days}</span>
-      <span className="font-normal text-muted-foreground">
-        {size !== "sm" && "day streak"}
+    <div className="flex items-center gap-2">
+      <Flame
+        className={`h-5 w-5 ${days > 0 ? "text-amber-400 fill-amber-400" : "text-muted-foreground"}`}
+      />
+      <span className="font-mono-nums text-2xl font-bold text-amber-400">
+        {days}
       </span>
+      <span className="text-sm text-muted-foreground">day streak</span>
     </div>
   );
 }

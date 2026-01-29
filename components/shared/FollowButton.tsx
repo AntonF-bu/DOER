@@ -1,48 +1,45 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { UserPlus, UserCheck } from "lucide-react";
 
 interface FollowButtonProps {
   companyId: string;
   initialFollowing?: boolean;
-  size?: "sm" | "default";
 }
 
-export function FollowButton({ companyId, initialFollowing = false, size = "default" }: FollowButtonProps) {
-  const [following, setFollowing] = useState(initialFollowing);
-  const [loading, setLoading] = useState(false);
+export function FollowButton({
+  companyId,
+  initialFollowing = false,
+}: FollowButtonProps) {
+  const [isFollowing, setIsFollowing] = useState(initialFollowing);
+  const [isHovered, setIsHovered] = useState(false);
 
-  const handleFollow = async (e: React.MouseEvent) => {
+  const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setLoading(true);
     // Optimistic update
-    setFollowing(!following);
-    // TODO: API call to follow/unfollow
-    setTimeout(() => setLoading(false), 300);
+    setIsFollowing(!isFollowing);
+    // TODO: API call to follow/unfollow company
   };
 
+  const label = isFollowing
+    ? isHovered
+      ? "Unfollow"
+      : "Following"
+    : "Follow";
+
   return (
-    <Button
-      variant={following ? "secondary" : "default"}
-      size={size === "sm" ? "sm" : "default"}
-      onClick={handleFollow}
-      disabled={loading}
-      className="gap-1.5"
+    <button
+      onClick={handleToggle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={
+        isFollowing
+          ? "bg-secondary text-foreground border border-border/50 rounded-lg px-4 py-1.5 text-sm font-medium transition-all hover:border-red-500/50 hover:text-red-400"
+          : "bg-primary text-primary-foreground rounded-lg px-4 py-1.5 text-sm font-medium transition-all hover:bg-primary/90"
+      }
     >
-      {following ? (
-        <>
-          <UserCheck className="h-4 w-4" />
-          Following
-        </>
-      ) : (
-        <>
-          <UserPlus className="h-4 w-4" />
-          Follow
-        </>
-      )}
-    </Button>
+      {label}
+    </button>
   );
 }

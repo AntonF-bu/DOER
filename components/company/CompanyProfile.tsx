@@ -1,35 +1,45 @@
-import { Company, TeamMember } from "@/types";
-import { StatusBadge } from "@/components/shared/Badge";
+"use client";
+
+import { Company, Log, FuelContribution, TeamMember } from "@/types";
+import { COMPANY_STAGES } from "@/lib/constants";
 import { FollowButton } from "@/components/shared/FollowButton";
-import { UserAvatar } from "@/components/shared/Avatar";
-import { Separator } from "@/components/ui/separator";
+import { FuelPanel } from "./FuelPanel";
+import { CompanyTimeline } from "./CompanyTimeline";
+import { TeamMembersList } from "./TeamMembers";
+import { MetricsDisplay } from "./MetricsDisplay";
 import {
-  Users,
-  FileText,
-  Flame,
-  TrendingUp,
-  Globe,
   MapPin,
+  Globe,
   ExternalLink,
+  Flame,
 } from "lucide-react";
 
 interface CompanyProfileProps {
   company: Company;
-  teamMembers: TeamMember[];
+  logs?: Log[];
+  fuelContributions?: FuelContribution[];
+  teamMembers?: TeamMember[];
 }
 
-export function CompanyProfile({ company, teamMembers }: CompanyProfileProps) {
+export function CompanyProfile({
+  company,
+  logs = [],
+  fuelContributions = [],
+  teamMembers = [],
+}: CompanyProfileProps) {
+  const stageConfig = COMPANY_STAGES[company.stage];
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start gap-4">
-        <div className="h-16 w-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-2xl shrink-0">
-          {company.name.charAt(0)}
-        </div>
-        <div className="flex-1">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">
+      {/* Left column - Main content */}
+      <div className="space-y-6 min-w-0">
+        {/* Header */}
+        <div>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold">{company.name}</h1>
+              <h1 className="text-2xl font-bold text-foreground">
+                {company.name}
+              </h1>
               {company.one_liner && (
                 <p className="text-muted-foreground mt-1">{company.one_liner}</p>
               )}
@@ -37,10 +47,17 @@ export function CompanyProfile({ company, teamMembers }: CompanyProfileProps) {
             <FollowButton companyId={company.id} />
           </div>
 
-          <div className="flex items-center gap-3 mt-3 flex-wrap">
-            <StatusBadge variant="stage" value={company.stage} />
+          {/* Meta: stage, industry, location, website */}
+          <div className="flex items-center gap-3 flex-wrap mt-3">
+            <span
+              className={`${stageConfig.color} ${stageConfig.bgColor} rounded-full px-2 py-0.5 text-xs`}
+            >
+              {stageConfig.label}
+            </span>
             {company.industry && (
-              <span className="text-sm text-muted-foreground">{company.industry}</span>
+              <span className="text-sm text-muted-foreground">
+                {company.industry}
+              </span>
             )}
             {company.location && (
               <span className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -61,78 +78,86 @@ export function CompanyProfile({ company, teamMembers }: CompanyProfileProps) {
               </a>
             )}
           </div>
+        </div>
 
-          <div className="flex items-center gap-4 mt-4 text-sm">
-            <span className="flex items-center gap-1.5">
-              <TrendingUp className="h-4 w-4 text-primary" />
-              <span className="font-semibold">{company.execution_score}</span>
-              <span className="text-muted-foreground">score</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Users className="h-4 w-4 text-muted-foreground" />
-              <span className="font-semibold">{company.follower_count || 0}</span>
-              <span className="text-muted-foreground">followers</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <FileText className="h-4 w-4 text-muted-foreground" />
-              <span className="font-semibold">{company.log_count || 0}</span>
-              <span className="text-muted-foreground">logs</span>
-            </span>
-            {company.streak_days > 0 && (
-              <span className="flex items-center gap-1.5 text-orange-500">
-                <Flame className="h-4 w-4" />
-                <span className="font-semibold">{company.streak_days}</span>
-                <span>day streak</span>
+        {/* Velocity section */}
+        <div className="bg-card/50 border border-border/50 rounded-xl p-5">
+          <div className="flex items-center gap-6 mb-3">
+            <div>
+              <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
+                Velocity
               </span>
-            )}
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className="text-4xl font-mono-nums text-foreground text-glow">
+                  {company.execution_score}
+                </span>
+              </div>
+            </div>
+            <div>
+              <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
+                Streak
+              </span>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <Flame className="h-5 w-5 text-orange-400" />
+                <span className="text-4xl font-mono-nums text-foreground">
+                  {company.streak_days}
+                </span>
+                <span className="text-sm text-muted-foreground">days</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Progress bar */}
+          <div className="h-2 rounded-full bg-secondary w-full overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-700 ease-out"
+              style={{ width: `${Math.min(company.execution_score, 100)}%` }}
+            />
+          </div>
+          <div className="flex justify-end mt-1.5">
+            <span className="text-xs font-mono-nums text-muted-foreground">
+              {company.execution_score}/100
+            </span>
           </div>
         </div>
-      </div>
 
-      {company.is_open_to_investors && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-3">
-          <p className="text-sm text-emerald-700 font-medium">
-            This company is open to investor conversations
-          </p>
-        </div>
-      )}
+        {/* Metrics row */}
+        <MetricsDisplay company={company} />
 
-      {/* Description */}
-      {company.description && (
-        <>
-          <Separator />
+        {/* Description */}
+        {company.description && (
           <div>
-            <h2 className="font-semibold mb-2">About</h2>
+            <h2 className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-2">
+              About
+            </h2>
             <p className="text-sm text-muted-foreground whitespace-pre-line">
               {company.description}
             </p>
           </div>
-        </>
-      )}
+        )}
 
-      {/* Team */}
-      {teamMembers.length > 0 && (
-        <>
-          <Separator />
-          <div>
-            <h2 className="font-semibold mb-3">Team</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {teamMembers.map((member) => (
-                <div key={member.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-                  <UserAvatar name={member.name} size="sm" />
-                  <div>
-                    <p className="text-sm font-medium">{member.name}</p>
-                    <p className="text-xs text-muted-foreground">{member.role}</p>
-                  </div>
-                  {member.is_founder && (
-                    <StatusBadge variant="role" value="founder" size="sm" />
-                  )}
-                </div>
-              ))}
-            </div>
+        {/* Team */}
+        {teamMembers.length > 0 && (
+          <TeamMembersList members={teamMembers} />
+        )}
+
+        {/* Investor interest */}
+        {company.is_open_to_investors && (
+          <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-lg px-4 py-3">
+            <p className="text-sm text-emerald-400 font-medium">
+              Open to investor conversations
+            </p>
           </div>
-        </>
-      )}
+        )}
+
+        {/* Timeline */}
+        <CompanyTimeline logs={logs} />
+      </div>
+
+      {/* Right sidebar - Fuel Panel */}
+      <div className="space-y-4">
+        <FuelPanel company={company} contributions={fuelContributions} />
+      </div>
     </div>
   );
 }

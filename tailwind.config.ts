@@ -16,6 +16,9 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        mono: ['"JetBrains Mono"', '"Fira Code"', '"SF Mono"', 'ui-monospace', 'monospace'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -65,10 +68,20 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "pulse-live": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.4" },
+        },
+        "slide-in-down": {
+          "0%": { transform: "translateY(-8px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-live": "pulse-live 2s ease-in-out infinite",
+        "slide-in-down": "slide-in-down 0.3s ease-out",
       },
     },
   },
